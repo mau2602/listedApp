@@ -1,0 +1,62 @@
+#title{
+    display: block; /* Asegura que la imagen se muestre como un bloque */
+    margin: 0 auto;
+    padding-top: 40px;
+    padding-bottom: 40px; 
+}
+
+#content{
+    text-align: center;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3498db;
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.button:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+#meatButton {
+    background-color: #aa455b;
+}
+
+#beerButton {
+    background-color: #303f52;
+}
+
+#pastaButton {
+    background-color: darkcyan;
+}
+
+body {
+    background-color: #e7d6c4;
+    align-items: center;
+}
+
+.cartRend{
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#prodContainer {
+    text-align: center;
+}
+
+#newListDiv {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
