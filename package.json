@@ -1,0 +1,25 @@
+{
+  "name": "testing-fetch-endpoints",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --ext js,json,html, css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.21.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongo": "^0.1.0",
+    "mongoose": "^8.6.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.5"
+  }
+}

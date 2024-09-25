@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to user portal</h1>
+    <button id="show-lists">Show lists</button>
+    <div id="lists-items"></div>
+    <button id="logout">Log Out</button>
+
+    <script>
+        function verifyToken() {
+            const token = localStorage.getItem('token')
+            if (!token) {
+                window.location.href = 'index.html'
+            }
+        }
+
+        verifyToken()
+
+        document.getElementById('show-lists').addEventListener('click', async () => {
+            const token = localStorage.getItem('token')
+            try {
+                const response = await fetch('http://localhost:4000/api/lists', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+
+                if (response.ok) {
+                    const data = await response.json()
+                    const listItems = data.list
+                    displayCart(listItems)
+                } else {
+                    console.error('Error fetching lists:', response.status)
+                }
+            } catch (error) {
+                console.error('Error fetching lists:', error)
+            }
+        });
+
+        function displayCart(lists) {
+            const listsDiv = document.getElementById('lists-items')
+            listsDiv.innerHTML = ''
+            if (lists.length === 0) {
+                listsDiv.innerHTML = '<p>You have no lists yet</p>'
+                return
+            }
+            lists.forEach(item => {
+                const itemDiv = document.createElement('div')
+                itemDiv.textContent = item
+                listsDiv.appendChild(itemDiv)
+            });
+        }
+
+        document.getElementById('logout').addEventListener('click', () => {
+            localStorage.removeItem('token')
+            window.location.href = 'index.html'
+        })
+    </script>
+</body>
+</html>
