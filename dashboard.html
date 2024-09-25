@@ -18,13 +18,12 @@
                 window.location.href = 'index.html'
             }
         }
-
         verifyToken()
 
         document.getElementById('show-lists').addEventListener('click', async () => {
             const token = localStorage.getItem('token')
             try {
-                const response = await fetch('http://localhost:4000/api/lists', {
+                const response = await fetch('http://localhost:4000/api/users/lists', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -34,7 +33,7 @@
                 if (response.ok) {
                     const data = await response.json()
                     const listItems = data.list
-                    displayCart(listItems)
+                    displayList(listItems)
                 } else {
                     console.error('Error fetching lists:', response.status)
                 }
@@ -43,7 +42,7 @@
             }
         });
 
-        function displayCart(lists) {
+        function displayList(lists) {
             const listsDiv = document.getElementById('lists-items')
             listsDiv.innerHTML = ''
             if (lists.length === 0) {

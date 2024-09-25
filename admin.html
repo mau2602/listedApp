@@ -17,7 +17,7 @@
         const usersDiv = document.getElementById('users')
         document.getElementById('all-users').addEventListener('click', async ()  =>{
             try {
-                const response = await fetch('http://localhost:4000/api/users/')
+                const response = await fetch('http://localhost:4000/api/users/lists')
                 
                 if (response.ok) {
                     prodsDiv.innerHTML = ''
@@ -80,7 +80,7 @@
         prodsBtn.addEventListener('click', async (event) => {
             usersDiv.innerHTML = ''
             prodsDiv.innerHTML = `<br><button id="new-product">New Product</button><br>
-                                  <button id="show-prods">Show Products</button>`
+                                  <button id="show-prods">Show Products</button><br><br>`
             
             const newProd = document.getElementById('new-product')
             newProd.addEventListener('click', async () => {
@@ -123,7 +123,7 @@
                     menuDiv.innerHTML = '<button id="delete-product">Delete Product</button><br><input id="prod-id-input" placeholder="Product ID"><br><br>'
                     const data = await response.json()
                     data.forEach(item => {
-                        const itemElement = document.createElement('li')
+                        const itemElement = document.createElement('p')
                         itemElement.innerHTML = `<strong>Name:</strong> ${item.name}<br>
                                                  <strong>Category:</strong> ${item.category}<br>
                                                  <strong>ID:</strong> ${item._id}<br><br>`
