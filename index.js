@@ -1,3 +1,4 @@
+
 document.getElementById('login-form').addEventListener('submit', async (event) => {
     event.preventDefault()
 
@@ -29,6 +30,16 @@ document.getElementById('login-form').addEventListener('submit', async (event) =
         console.error('Error during login:', error)
     }
 })
+const landingDiv = document.getElementById('landing-div')
+const newUserBtn = document.getElementById("new-user-btn")
+newUserBtn.addEventListener('click', () => {
+    landingDiv.innerHTML = `<form id='register-form' method='POST'> 
+    <input type="text" name="username" placeholder="Username" required> 
+    <input type="password" name="password" placeholder="Password" required> 
+    <input type="text" name="name" placeholder="Name" required> 
+    <input type="text" name="email" placeholder="Email" required> 
+    <button type="submit">REGISTER</button> 
+</form>`
 
 document.getElementById('register-form').addEventListener('submit', async (event) => {
     event.preventDefault()
@@ -47,6 +58,7 @@ document.getElementById('register-form').addEventListener('submit', async (event
         if (response.ok) {
             const data = await response.json()
             console.log('User registered:', data)
+            window.location.href = 'dashboard.html'
         } else {
             const error = await response.json()
             console.error('Error response:', error) 
@@ -55,4 +67,5 @@ document.getElementById('register-form').addEventListener('submit', async (event
         console.error('Error registering user:', error)
         res.status(500).json({ message: 'Error during registration', error: error.message }) 
     }
+})
 })

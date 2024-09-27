@@ -7,20 +7,16 @@
     <title>Listed!</title>
 </head>
 <body>
-    <h1>Listed!</h1>
-    <form id='login-form' method='POST'>
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <button type="submit" id="login">LOG IN</button>
-    </form>
-    <form id='register-form' method='POST'>
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
-        <input type="text" name="name" placeholder="Name" required>
-        <input type="text" name="email" placeholder="Email" required>
-        <button type="submit">REGISTER</button>
-    </form>
-
+    <div id="landing-div">
+        <h1>Listed!</h1>
+        <form id='login-form' method='POST'>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" id="login">LOG IN</button>
+            <p id="not-user-text">Not a Listed! user yet?</p>
+            <button id="new-user-btn">New User</button>
+        </form>
+    </div>
     <script src="./index.js"></script>
 </body>
 </html>

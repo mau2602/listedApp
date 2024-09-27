@@ -13,7 +13,7 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
                 'Authorization': `Bearer ${token}`, 
                 'Content-Type': 'application/json'
             }
-        });
+        })
                 
         if (response.ok) {
             usersDiv.innerHTML = ''
@@ -75,7 +75,7 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
 const prodsBtn = document.getElementById('all-products')
 prodsDiv = document.getElementById('products')
 const adminDiv = document.getElementById('admin-div')
-prodsBtn.addEventListener('click', async (event) => {
+prodsBtn.addEventListener('click', async () => {
     usersDiv.innerHTML = ''
     prodsDiv.innerHTML = `<br><button id="new-product">New Product</button><br>
                           <button id="show-prods">Show Products</button><br><br>`
