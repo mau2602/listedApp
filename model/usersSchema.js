@@ -8,7 +8,11 @@ const usersSchema = new Schema ({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, default: 'user'},
-    lists: { type: Array, default: []}
+    lists: {
+        id: { type: Schema.Types.ObjectId, required: false },
+        name: { type: String, required: false },
+        products: { type: Array, default: [] },
+      }
 })
 
 const User = model('User', usersSchema)

@@ -46,9 +46,35 @@
             const listsDiv = document.getElementById('lists-items')
             listsDiv.innerHTML = ''
             if (lists.length === 0) {
-                listsDiv.innerHTML = '<p>You have no lists yet</p>'
-                return
+                listsDiv.innerHTML = '<p>You have no lists yet</p><br><button id="new-list-btn">Create New List</button>'
             }
+            const listBtn = document.getElementById('new-list-btn')
+            listBtn.addEventListener('click', () => {
+                listsDiv.innerHTML = '<input id="list-name" placeholder="New list name"><br><button id="create-list">Create</button>'
+                const createBtn = document.getElementById('create-list')
+                createBtn.addEventListener('click', async () => {
+                    const newListName = document.getElementById('list-name').value 
+                    const list = {"name": newListName, "products": []} 
+                    listsDiv.innerHTML = `<button id="add-products">Add products</button>`
+                    const addProdBtn = document.getElementById('add-products')
+                    addProdBtn.addEventListener('click', async () => {
+                        const response = await fetch('http://localhost:4000/api/products')
+                        if(response.ok){
+                            const prodListDiv = document.createElement('div')
+                            const data = await response.json()
+                            data.forEach(item => {
+                            const itemElement = document.createElement('p')
+                            itemElement.innerHTML = `<strong>Name:</strong> ${item.name}<br>
+                                                     <strong>Category:</strong> ${item.category}<br>
+                                                     <button id="add-btn">ADD</button><br><br>`
+                            prodListDiv.appendChild(itemElement)
+                            listsDiv.appendChild(prodListDiv)
+                            })
+                        }
+                    })
+                })   
+            })
+            
             lists.forEach(item => {
                 const itemDiv = document.createElement('div')
                 itemDiv.textContent = item

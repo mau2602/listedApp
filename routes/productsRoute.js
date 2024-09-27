@@ -1,5 +1,6 @@
 import express from 'express'
 import Product from '../model/productsSchema.js'
+import User from '../model/usersSchema.js'
 const productsRouter = express.Router()
 
 // Get all products
@@ -34,6 +35,16 @@ productsRouter.delete('/:id', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error deleting product' })
     }
-});
+})
+// Endpoint 
+productsRouter.get('/:id', async (req, res) => {
+    let id = req.params.id
+    try {
+        const user = await User.findById(id)
+
+    } catch {
+
+    }
+})
 
 export default productsRouter 

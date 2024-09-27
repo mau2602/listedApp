@@ -1,9 +1,8 @@
 import express from 'express'
 import cors from 'cors'
 import mongoose from 'mongoose'
-
-import usersRouter from './routes/users.js'
-import productsRouter from './routes/products.js'
+import usersRouter from './routes/usersRoute.js'
+import productsRouter from './routes/productsRoute.js'
 
 const app = express()
 const port = 4000
@@ -11,10 +10,7 @@ app.use(cors())
 app.use(express.json())
 
 // Database connection
-mongoose.connect('mongodb://localhost/testing', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose.connect('mongodb://localhost/testing')       //     {useNewUrlParser: true,  useUnifiedTopology: true} -- deprecated
   .then(() => console.log('MongoDB on'))
   .catch(err => console.error('Error trying to connect to MongoDB', err))
 

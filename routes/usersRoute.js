@@ -2,6 +2,7 @@ import express from 'express'
 import User from '../model/usersSchema.js'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+
 const usersRouter = express.Router()
 
 // Get all users
@@ -27,7 +28,7 @@ usersRouter.post('/register', async (req, res) => {
         
         res.status(201).json({ message: 'User registered successfully' })
     } catch (error) {
-        res.status(500).json({ message: 'Error during registration' })
+        res.status(500).json({ message: 'Error during registration', error: error.message})
     }
 })
 // user login
@@ -47,29 +48,45 @@ usersRouter.post('/login', async (req, res) => {
         }
     
         const token = jwt.sign({ id: user._id }, 'your_jwt_secret', { expiresIn: '1h' })
-    
         res.status(200).json({ message: 'Login successful', token, role: user.role })
     } catch (error) {
         console.error('Error during login:', error)
         res.status(500).json({ error: 'Internal server error' })
     }
 })
+
+// Update a user
+usersRouter.put('/lists', async (req, res) => {
+    try{
+        const token = req.headers['authorization']?.split(' ')[1]
+        if (!token) return res.status(401).json({ message: 'Unauthorized. No token found' })
+        const decoded = jwt.verify(token, 'your_jwt_secret')
+        const user = await User.findById(decoded.id)
+        if (!user) return res.status(404).json({ message: 'User not found' })
+
+        res.status(200).json({ list: user.lists })
+    } catch (error) {
+        console.error('Error fetching lists:', error)
+        res.status(500).json({ message: 'Internal server error' })
+    }
+})
+
 // get user lists
 usersRouter.get('/lists', async (req, res) => {
+   
+    try {
         const token = req.headers['authorization']?.split(' ')[1]
-        if (!token) return res.status(401).json({ message: 'Unauthorized' })
-    
-        try {
-            const decoded = jwt.verify(token, 'your_jwt_secret')
-            const user = await User.findById(decoded.id)
-            if (!user) return res.status(404).json({ message: 'User not found' })
-    
-            res.status(200).json({ list: user.lists })
-        } catch (error) {
-            console.error('Error fetching lists:', error)
-            res.status(500).json({ message: 'Internal server error' })
-        }
-    })
+        if (!token) return res.status(401).json({ message: 'Unauthorized. No token found' })
+        const decoded = jwt.verify(token, 'your_jwt_secret')
+        const user = await User.findById(decoded.id)
+        if (!user) return res.status(404).json({ message: 'User not found' })
+
+        res.status(200).json({ list: user.lists })
+    } catch (error) {
+        console.error('Error fetching lists:', error)
+        res.status(500).json({ message: 'Internal server error' })
+    }
+})
 
 // Delete a user
 usersRouter.delete('/:id', async (req, res) => {
