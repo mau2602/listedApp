@@ -22,11 +22,13 @@ document.getElementById('show-lists').addEventListener('click', async () => {
             displayList(listItems)
         } else {
             console.error('Error fetching lists:', response.status)
+            alert('Error fetching lists')
         }
     } catch (error) {
         console.error('Error fetching lists:', error)
+        alert('Error fetching lists')
     }
-});
+})
 
 function displayList(lists) {
     const listsDiv = document.getElementById('lists-items')
@@ -69,7 +71,6 @@ const listBtn = document.getElementById('new-list-btn')
     }
     
 }
-
 document.getElementById('logout').addEventListener('click', () => {
     localStorage.removeItem('token')
     window.location.href = 'index.html'

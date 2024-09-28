@@ -1,3 +1,6 @@
+// Admin portal DOM manipulation and data fetching
+
+// Users 
 const usersDiv = document.getElementById('users')
 document.getElementById('all-users').addEventListener('click', async ()  =>{
     try {
@@ -14,11 +17,11 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
                 'Content-Type': 'application/json'
             }
         })
-                
         if (response.ok) {
             usersDiv.innerHTML = ''
             const data = await response.json()
             const adminMenu = document.createElement('p')
+            prodsDiv.innerHTML = ''
             adminMenu.innerHTML = `<button id='delete-user'>Delete</button>
                                    <input type="text" id="user-id-delete" placeholder="user ID" required>`
             
@@ -29,11 +32,11 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
                     <strong>Email:</strong> ${user.email}<br>
                     <strong>ID:</strong> ${user._id}<br><br>`
                 usersDiv.appendChild(userElement)
-            });
-
+            })
             usersDiv.appendChild(adminMenu)
         } else {
                 console.error('Error fetching product:', response.status)
+                alert('Error fetching product')
             }
 
         const deleteBtn = document.getElementById('delete-user')
@@ -44,7 +47,6 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
                 alert('Please provide a user ID');
                 return;
             }
-            
             try {
                 const response = await fetch(`http://localhost:4000/api/users/${userId}`, {
                     method: 'DELETE',
@@ -53,7 +55,6 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 })
-            
                 if (response.ok) {
                     const data = await response.json()
                     console.log('User deleted:', data)
@@ -72,6 +73,7 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
 
     })
 
+// Products
 const prodsBtn = document.getElementById('all-products')
 prodsDiv = document.getElementById('products')
 const adminDiv = document.getElementById('admin-div')
