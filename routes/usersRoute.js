@@ -17,13 +17,13 @@ usersRouter.get('/', async (req, res) => {
 
 // Register new user
 usersRouter.post('/register', async (req, res) => {
-    const { name, username, email, password } = req.body
+    const { username, password, name, email } = req.body
     try {
         const userNameTaken = await User.findOne({ username })
         if (userNameTaken) return res.status(400).json({ message: 'Username already taken' })
         
         const hashedPassword = await bcrypt.hash(password, 12)
-        const newUser = new User({ name, username, email, password: hashedPassword })
+        const newUser = new User({ username, password: hashedPassword, name, email, role: 'user', lists: [] })
         await newUser.save()
         
         res.status(201).json({ message: 'User registered successfully' })

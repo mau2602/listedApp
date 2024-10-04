@@ -15,15 +15,20 @@ productsRouter.get('/', async (req, res) => {
 
 // Create new product
 productsRouter.post('/', async (req, res) => {
-    const { name, category } = req.body
     try {
-        const newProduct = new Product({ name, category })
-        const savedProduct = await newProduct.save()
-        res.status(201).json({ message: 'Product added', savedProduct })
+        const { name, category } = req.body
+        if (!name || !category) {
+            return res.status(400).json({ message: 'Name and category are required' })
+        }
+        const product = new Product({ name, category })
+        await product.save()
+
+        res.status(200).json({ message: 'Product saved successfully', product })
     } catch (error) {
-        res.status(500).json({ message: 'Error saving product' })
+        console.error('Error saving product:', error.message)
+        res.status(500).json({ message: 'Internal server error', error: error.message })
     }
-});
+})
 
 // Delete product
 productsRouter.delete('/:id', async (req, res) => {

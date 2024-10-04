@@ -2,38 +2,39 @@
 
 // Users 
 const usersDiv = document.getElementById('users')
+let prodsDiv = document.getElementById('products')
+const adminMenu = document.createElement('p')
+async function showUsers(data){
+    data.data.forEach(user => {
+    const userElement = document.createElement('p')
+    userElement.innerHTML = `
+        <strong>Username:</strong> ${user.username}<br>
+        <strong>Email:</strong> ${user.email}<br>
+        <strong>ID:</strong> ${user._id}<br><br>`
+    usersDiv.appendChild(userElement)
+})
+usersDiv.appendChild(adminMenu)
+}
 document.getElementById('all-users').addEventListener('click', async ()  =>{
     try {
         const token = localStorage.getItem('token')
-
         if(!token){
             alert('User not authenticated. Log in first')
             return
         }
-        const response = await fetch('http://localhost:4000/api/users', {
-            method: 'GET',
+        const response = await axios.get('http://localhost:4000/api/users', {
             headers: {
-                'Authorization': `Bearer ${token}`, 
-                'Content-Type': 'application/json'
+              Authorization: `Bearer ${token}`
             }
-        })
-        if (response.ok) {
-            usersDiv.innerHTML = ''
-            const data = await response.json()
-            const adminMenu = document.createElement('p')
-            prodsDiv.innerHTML = ''
-            adminMenu.innerHTML = `<button id='delete-user'>Delete</button>
-                                   <input type="text" id="user-id-delete" placeholder="user ID" required>`
-            
-            data.data.forEach(user => {
-                const userElement = document.createElement('p')
-                userElement.innerHTML = `
-                    <strong>Username:</strong> ${user.username}<br>
-                    <strong>Email:</strong> ${user.email}<br>
-                    <strong>ID:</strong> ${user._id}<br><br>`
-                usersDiv.appendChild(userElement)
-            })
-            usersDiv.appendChild(adminMenu)
+          })
+
+        if (response.status === 200) {
+                usersDiv.innerHTML = ''
+                const data = response.data
+                prodsDiv.innerHTML = ''
+                adminMenu.innerHTML = `<button id='delete-user'>Delete</button>
+                                       <input type="text" id="user-id-delete" placeholder="user ID" required>`
+                showUsers(data)
         } else {
                 console.error('Error fetching product:', response.status)
                 alert('Error fetching product')
@@ -48,15 +49,14 @@ document.getElementById('all-users').addEventListener('click', async ()  =>{
                 return;
             }
             try {
-                const response = await fetch(`http://localhost:4000/api/users/${userId}`, {
-                    method: 'DELETE',
+                const response = await axios.delete(`http://localhost:4000/api/users/${userId}`, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
                 })
-                if (response.ok) {
-                    const data = await response.json()
+                if (response.status === 200) {
+                    const data = await response.data
                     console.log('User deleted:', data)
                 } else {
                     console.error('Error deleting user:', response.status)
@@ -94,18 +94,26 @@ prodsBtn.addEventListener('click', async () => {
         saveBtn.addEventListener('click', async () => {
             const name = document.getElementById('prod-name').value
             const category = document.getElementById('prod-cat').value
-
             try {
-                const response = await fetch('http://localhost:4000/api/products', {
-                    method: 'POST',
+                if(!name || !category){
+                    console.error('Name or category missing.')
+                    return
+                }
+                const token = localStorage.getItem('token')
+                if (!token) {
+                    console.error('No token found, please log in.')
+                    return
+                }
+                const response = await axios.post('http://localhost:4000/api/products',
+                { name: name, category: category },
+                {
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    },
-                    body: JSON.stringify({ name, category })
+                        'Authorization': `Bearer ${token}`
+                    }
                 })
-                if (response.ok) {
-                    const data = await response.json()
+                if (response.status === 200) {
+                    const data = response.data
                     console.log('Product saved:', data)
                     document.getElementById('prod-name').value = ''
                     document.getElementById('prod-cat').value = ''
@@ -114,8 +122,15 @@ prodsBtn.addEventListener('click', async () => {
                 }
 
             } catch (error) {
-                console.error('Error during request:', error)
+                if (error.response) {
+                    console.error('Error during request:', error.response.data)
+                    console.error('Status code:', error.response.status)
+                } else if (error.request) {
+                    console.error('No response from server:', error.request)
+                } else {
+                    console.error('Error setting up request:', error.message)
                 }
+            }
         })
     })   
     const showProdsBtn = document.getElementById('show-prods')
@@ -140,7 +155,7 @@ prodsBtn.addEventListener('click', async () => {
         const deleteProdBtn = document.getElementById('delete-product')
         
         deleteProdBtn.addEventListener('click', async () => {
-            const prodID = document.getElementById('prod-id-input').valu
+            const prodID = document.getElementById('prod-id-input').value
             if (!prodID) {
                 alert('Please provide a product ID')
                 return
@@ -165,6 +180,7 @@ prodsBtn.addEventListener('click', async () => {
         })
     })
 })
+// Log out 
 const logout = document.getElementById('logout')
 logout.addEventListener('click', () => {
     localStorage.removeItem('token')
